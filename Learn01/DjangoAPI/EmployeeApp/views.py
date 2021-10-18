@@ -21,3 +21,16 @@ def departmentApi(request, id=0):
             departments_serializer.save()
             return JsonResponse('200', safe=False)
         return JsonResponse('500', safe=False)
+    elif request.method == 'PUT':
+        department_data = JSONParser().parse(request)
+        department = Departments.objects.get(DepartmentId = department_data['DepartmentId'])
+        # check if Department has a record in the DB
+        departments_serializer = DepartmentSerializer(department, data=department_data)
+        if departments_serializer.is_valid():
+            departments_serializer.save()
+            return JsonResponse('200', safe=False)
+        return JsonResponse('500', safe=False)
+    elif request.method == 'DELETE':
+        department = Departments.objects.get(DepartmentId = id)
+        department.delete()
+        return JsonResponse('200', safe=False)
